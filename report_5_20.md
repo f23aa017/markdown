@@ -1,2 +1,2 @@
-# GitとFlutterの結びつけ
+# GitとVSCodeの結びつけ
 
