@@ -58,13 +58,57 @@
 runApp(const MyApp());  
 }  
 - ７～１２行目_クラス  
-ウィジェットを作成するうえで基礎となるものを継承する必要がある。それが`StatelessWidgetクラス`。これは、ステート（状態を表す値）を持たない、ウィジェットのベースとなるクラス。  
-このクラスに用意されているメソッドに一つに`build`がある。これはウィジェットを生成する際に呼び出すものである。  
-ウィジェットをデザインするので使われるのが`MaterialApp`。これによりウィジェットに「何か」を表示させることができる。
->class MyApp extends StatelessWidget {
+　ウィジェットを作成するうえで基礎となるものを継承する必要がある。それが`StatelessWidgetクラス`。これは、ステート（状態を表す値）を持たない、ウィジェットのベースとなるクラス。  
+　このクラスに用意されているメソッドに一つに`build`がある。これはウィジェットを生成する際に呼び出すものである。  
+　ウィジェットをデザインするので使われるのが`MaterialApp`。これによりウィジェットに「何か」を表示させることができる。
+>class MyApp extends StatelessWidget {  
   @override  
   Widget build(BuildContext context) {  
-  　return MaterialApp();  
-　　}  
+   return MaterialApp();  
+　 }  
   }
-    
+  - `MaterialApp`の構成  + Textウィジェット  
+　MaterialAppクラスは引数に様々な情報を載せることができる。  
+　以下の例文では`title`と`home`の二つの引数を使用している。それぞれ`title`はアプリケーションのタイトルを、`home`はアプリケーションに組み込まれるウィジェットを表す。   
+　homeで指定されている`Text`はテキストを表示するウィジェットである。  
+　第１引数に表示するテキストを、第２引数に`style`でテキストスタイルを設定している。（`TextStyle`は決まっているものを引っ張ってきているだけ）
+> return MaterialApp(  
+   title: 'Flutter Demo',  
+   home: Text(  
+    'Hello, Flutter World!!',  
+     style: TextStyle(fontSize:32.0),  
+   )  
+);  
+
+**まとめ**  
+1.プログラムはmain関数から開始するため、`mainにアプリを起動するrunApp関数を記述する。`  
+2.`runApp関数はStatelessWidgetクラスを継承したインスタンスを引数に指定する。`これがアプリ本体のUI。  
+3.上記を継承したインスタンスには`buildメソッドを用意する`ここでMaterialAppインスタンスをreturnする。  
+4.MaterialAppの引数`homeにアプリ内に表示するウィジェットを設定する`。
+
+**マテリアルデザインとFlutter**  
+まずMaterialAppは、マテリアルデザインによるウィジェットを作成するためのベースである。`マテリアルデザイン`とはGllgleが提唱する`あらゆるデバイスで共通したルック&フィールを構築した視覚的デザイン言語`。  
+Flutterではデフォルトでマテリアルデザインのパッケージ`material.dart`が読み込まれている。（iOS独自性のクパティーノデザイン、`cupertino.dart`も用意されている。）  
+
+**アプリケーションバーと内容**  
+スマートフォンのアプリには上部にタイトルを表示するアプリケーションバーがありその下に内容が表示される形である。その形を作るのが`Scaffold`（建築の「足場」）。  
+Scafflodにはマテリアルデザインの基本的なデザインとレイアウトが組み込まれており、アプリ作成の土台となる部分を担当する部品である。
+> MyAppクラスのところだけ書き換える  
+return MaterialApp(  
+    title: 'Flutter Demo',  
+    home: Scaffold(  
+      appBar: AppBar(  
+       title: Text('Hello Flutter!'),  
+    )  
+    body: Text(  
+      'Hello, Flutter World!!',  
+       style: TextStyle(fontSize:32.0),  
+    ),  
+    ),  
+);  
+- Scafflodの構成  
+  - appBar  
+  ここではアプリケーションバーに値を設定する。  
+  また、AppBarというクラスのインスタンスが設定されており、これはアプリケーションバーのウィジェットクラスになる。  
+  - body  
+  アプリケーションバーの下のク泊エリア全体の表示を担当する。実際のアプリの表示場所。
