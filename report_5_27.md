@@ -125,7 +125,7 @@ Containerクラスとはウィジェットの細かい配置の設定を行え�
 - Sized  
 表示サイズを最大化するためのもの
 - Padding  
-余白幅の設定。上下左右の余白を整数で指定する。　　
+余白幅の設定。上下左右の余白を整数で指定する。  
 以下は上記の動作を実行し変更があった`_MyHomePageStateクラス`のコードである。
 >class _MyHomePageState extends State<MyHomePage> {  
     @override  
@@ -167,3 +167,119 @@ onlyは上下左右のうち、必要な項目だけを指定するもの。省�
 - シンメトリック  
 symmetricは横（左右）と縦（上下）にそれぞれ同じ値を設定する。引数には横の余白幅と縦の余白幅をそれぞれ指定する。  
 >const EdgeInsetes.symmetric(横,縦)  
+### Alignmentについて  
+alignmentは配置場所を示していて、`Alignmentクラス`を使っている。Alignmentクラスは用意されている定数、もしくは-1.0~1.0の範囲で全体の位置を指定する。  
+定数と公式は以下のとおりである。  
+- topLeft → 左上  
+- topCenter → 中央上  
+- topRight → 右上  
+- centerLeft → 左中央  
+- centerCenter → 中央  
+- centerRight → 右中央  
+- bottomLeft → 左下   
+- bottomCenter → 中央下  
+- bottomRight → 右下  
+数値は左・上に行くほど値が小さくなり、右・下に行くほど値が大きくなる。  
+> const Alignment(横,縦)  
+# 複数ウィジェットの配置  
+## Columnを使う  
+実際のデザインでは複数のウィジェットを使って作る。そのため複数のウィジェットを組み込めるコンテナが必要。その中でも`Column`は複数のウィジェットを `縦`に並べて配置するものである。配置の仕方はCenter,Containerと同様のため割愛（Textは追加された縦棒より左側へ）。  
+以下はColumnに用意されたプロパティである。  
+- Main Axis Alignment  
+Columnウィジェットの配置場所を指定する。値はMainAxisAlignmentクラスのatart、center、endのどれか。  
+- Cross Axis Alignment  
+Columnに組み込まれたウィジェットの吐いて場所を指定する。値は、CrossAxisAlignmentクラスのstart,cente,end,baseline,stertchのどれか。  
+- Main Axis Size  
+ウィジェットのサイズを指定する。値はMainAsixSizeのmin、maxのどれか。  
+> MainAxisAlignmentとCrossAxisAlignmentは、コンテナによって並び方が異なる場合もあるため、ウィジェットがコンテナ内に配置された最初の位置かコンテナの一番後の位置という形で配置場所を決める。  
+
+Column追加後変更があった_MyHomePageStateクラスのコード  。
+> class _MyHomePageState extends State<MyHomePage> {  
+    @override  
+    Widget build(BuildContext context) {  
+      return new Scaffold(  
+        appBar: new AppBar(  
+          title: new Text('App Name'),  
+          ),  
+        body:  
+          new Column(  
+            mainAxisAlignment: MainAxisAlignment.start,  
+            mainAxisSize: MainAxisSize.max,  
+            crossAxisAlignment: CrossAxisAlignment.center,  
+            children: <Widget>[  
+              new Text(  
+              "one",  
+                style: new TextStyle(fontSize:41.0,  
+                color: const Color(0xFF000000),  
+                fontWeight: FontWeight.w500,  
+                fontFamily: "Roboto"),  
+              ),  
+              new Text(  
+              "two",  
+                style: new TextStyle(fontSize:43.0,  
+                color: const Color(0xFF000000),  
+                fontWeight: FontWeight.w500,  
+                fontFamily: "Roboto"),  
+              ),  
+              new Text(  
+              "three",  
+                style: new TextStyle(fontSize:38.0,  
+                color: const Color(0xFF000000),  
+                fontWeight: FontWeight.w500,  
+                fontFamily: "Roboto"),  
+              )  
+            ]  
+          ),  
+      );  
+    }  
+}  
+
+### Columnの基本形  
+Columnクラスを見ると先ほど箇条書きで挙げた`mainAxisAlignment`、`mainAxisSize`、`crossAxisAligment`の3つに加えてColumnに組み込まれるウィジェットを用意する`children`といった値があるのが分かる。Columnはchildrenのリストから順にウィジェットを表示しているため、リストの並びが変われば表示されるぃジェットの順番も変わる。  
+## Rowを使う  
+Columnの横バージョン。配置の仕方も用意されているプロパティも同じ。以下はRow追加後変更のあったMyHomePageStateクラスのコード。  
+> class _MyHomePageState extends State<MyHomePage> {  
+    @override  
+    Widget build(BuildContext context) {  
+      return new Scaffold(  
+        appBar: new AppBar(  
+          title: new Text('App Name'),  
+          ),  
+        body:  
+          new Row(  
+            mainAxisAlignment: MainAxisAlignment.start,  
+            mainAxisSize: MainAxisSize.max,  
+            crossAxisAlignment: CrossAxisAlignment.center,  
+            children: <Widget>[  
+              new Text(  
+              "one",  
+                style: new TextStyle(fontSize:43.0,  
+                color: const Color(0xFF000000),  
+                fontWeight: FontWeight.w500,  
+                fontFamily: "Roboto"),  
+              ),  
+              new Text(  
+              "two",  
+                style: new TextStyle(fontSize:43.0,  
+                color: const Color(0xFF000000),  
+                fontWeight: FontWeight.w500,  
+                fontFamily: "Roboto"),  
+              ),  
+              new Text(  
+              "three",  
+                style: new TextStyle(fontSize:41.0,  
+                color: const Color(0xFF000000),  
+                fontWeight: FontWeight.w500,  
+                fontFamily: "Roboto"),  
+              )  
+            ]  
+          ),  
+      );  
+    }  
+}  
+### Main Axis と Cross Axis  
+複数のウィジェットを並べて配置するコンテナでは並ぶ方向を以下のように指定して考える。  
+- Main Axis  
+ウィジェットが順に並ぶ方向。Columnは縦方向、Rowは横方向。  
+- Cross Axis  
+並んだウィジェットと交差する方向。Columnは横方向、Rowは縦方向。
