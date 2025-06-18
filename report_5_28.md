@@ -148,7 +148,8 @@ RawMaterialButtonには主に以下の表示に関する値が用意されてい
 # 入力のためのUI  
 ## TextFieldについて  
 `TextField`はテキストを入力するUIウィジェット。  
-次のコードはテキストを入力し、ボタンをクリックするとメッセージが表示される_MyHonePageStateクラスのソースコードである。  
+配置するには「Input」ジャンルから対象のものをドラッグ。右側にはフォント名、カラーパレット、Size、Weightのプロパティが表示される。  
+次のコードはテキストを入力し、ボタンをクリックするとメッセージが表示される_MyHonePageStateクラスのソースコードである。（以降このコードに変更を加えて学習を進めるため、`変更点のみを追記していく`）  
 >class _MyHomePageState extends State<MyHomePage> {  
   static var _message = 'ok.';  
   static final _controller = TextEditingController();
@@ -234,4 +235,54 @@ void textChanged(String val){
   });  
 }  
 ### onChangedメソッドの定義  
-onChangedイベントに指定されているtextChangedメソッドではsetStateが用意されている。StatefulWidgetのステートを操作する場合は常にsetStateを使う。
+onChangedイベントに指定されているtextChangedメソッドではsetStateが用意されている。StatefulWidgetのステートを操作する場合は常にsetStateを使う。  
+## Checkboxについて  
+二者択一の値を入力する「チェックボックス」は`Checkboxクラス`として用意されている。Checkboxではチェックの部分のみを表示するため、テキストを表示させたい場合は別途で追加する必要がある。  
+配置するには「Input」ジャンルから対象のものをドラッグ。プロパティにはTop、Bottom、Left、RightのPaddingの値のみ表示される。  
+以下のコードの変更点は`static final _controller = TextEditingController();からstatic var _checked = false;への変更`、`2つ目のPadding(略)がRow、Checkbox、Textへの変更`、`buttonPressed()からvoid checkChanged(bool? value){}への変更`となっている。  
+>static var _checked = false;  
+(略)  
+  new Padding(  
+    padding: EdgeInsets.all(10.0),  
+    child: new Row(  
+      mainAxisAlignment: MainAxisAlignment.start,  
+      mainAxisSize: MainAxisSize.max,  
+      crossAxisAlignment: CrossAxisAlignment.end,  
+      children: <Widget>[  
+        new Checkbox(key:null,  
+        onChanged: checkChanged,  
+        value:_cheked  
+        ),  
+        new Text(  
+          "qWerty1",  
+          style: new TextStyle(fontSize:22.0,  
+            color: const Color(0xFF000000),  
+            fontWeight: FontWeight.w400,  
+            fontFamily: "Roboto"),  
+        )  
+      ]  
+    ),  
+  )  
+(略)  
+void checkChanged(bool? value){  
+  setState(() {  
+    _checkd = value!;  
+    _message = value ? 'checked!' : 'not checked...';  
+  });  
+}  
+### Checkboxの基本  
+`value`はチェック状態を示すものでbool値で指定する。true=ON、false=OFF。`onChanged`はチェック状態が変更された際に発生するイベントの処理を指定する。今回はcheckChangedメソッド。  
+メソッドでは受け取ったbool値によって_messageつまり、Textのメッセージを変更している。そしてこのメソッドのようにチェック状態の変更はプログラマが明示的に処理をする必要がある。  
+## Switchについて  
+Checkboxと見た目が違うだけで基本的な機能はほぼ同じものに「スイッチ」がある。  
+配置するには「Input」から対象のものをドラッグ。プロパティにはテキスト関連の値が表示されるがすべて関係なく、Swich特有のプロパティは表示されない。  
+以下のコードの変更点は`Checkbox(略)をSwitch(略)へ変更`のみで中身のコードも変更なしとなっている。  
+>Switch(  
+  value:_checked,  
+  onChanged: checkChanged,  
+),  
+## Radioについて  
+複数の項目から一つを選ぶラジオボタンもある。  
+配置するには「Input」から対象のものをドラッグ。プロパティは何もなく、手作業デコーディングしていく必要がある。  
+以下のコードの変更点は`static final _controller = TextEditingController();からstatic var _selected = 'A';への変更`、`二つ目のPaddingの中身がpadding:略のみ`、`Row、Radio、Textのセットを二つ追加`、`checkChanged(String? value){略}の変更`となっている。  
+>
