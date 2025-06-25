@@ -71,7 +71,9 @@ Stateクラスはウィジェットの状態を扱うもので単体で存在す
 builderの`AlerDialog`ではタイトルとコンテンツを表示するウィジェットをそれぞれtitleとcontextに指定している。  
 ほかにも`actions`というプロパティが用意されており、ウィジェットのリストを用意する。これはボタン関係のインスタンスが用いられる。詳細は下記にて記述する。  
 ## アラートにボタンを追加する  
-**ここにactionsのボタン処理の用意やshowDialogのアラートを閉じた処理について記述する**
+アラートに様々な働きを用意するには（今回はボタン）`actions`というプロパティに対応するウィジェットを記述する必要がある。  
+actionsにはウィジェットのリストを用意する。ここには今回でいうボタンをクリックしたときの処理を用意し、showDialog後にアラートを閉じた後の処理を記述する。  
+アラートを閉じた後の処理はshowDialogの後に`then`というメソッドを用意し実行する処理を記述する。thenは非同期に実行されるメソッドであるshowDialogを実行された後の処理を`showDialogのコールバック関数`として用意されるものである。
 アラートにボタンを追加するには基礎コードにbuttonPressedメソッドに以下の修正・追記に加えてresultAlertメソッドを追記する。
 >void buttonPressed(){  
     showDialog(  
@@ -96,4 +98,34 @@ void resultAlert(String value) {
     setState((){  
         _message = 'selected: $value';  
     });  
+}  
+### actionsとthen  
+actionsのウィジェットの中にあるメソッドに`Navigator.pop`がある。これは表示されているアラートダイアログを消す働きをする。中身はContextとアラートを閉じる際に送られる値を引数にしている。そのため、事前に型の値を決めてコーディングする必要がある。  
+thenメソッドの中ではresultAlertメソッドがコールバックとして呼び出されている。この時に渡されるNavigator.popの第二引数に指定されていたvalueをチェックすることでどのボタンを選んだかが判断できる。  
+## SimpleDialogについて  
+`SimpleDialogクラス`はAlertDialogと同じくDialogというクラスを継承して作られたユーザーに入力をしてもらえるダイアログである。引数のtitleにはタイトルのテキストなどを、childrenには選択肢として表示する項目のリスト`SimpleDialogOptionクラス`のインスタンスを用意する。    
+`SimpleDialogOptionクラス`はSimpleDialogの選択肢の項目として使う専用のクラスである。引数のchildには項目内に表示するウィジェットを、onPressedには項目をクリックしたときの処理を用意する。  
+書き方が変わるだけで、中の動きはAlertDialogとほぼ同じである。
+利用するには基礎コードにbuttonPressedメソッドに以下の修正・追記に加えてresultAlertメソッドをそのまま利用する。そのためbuttonPressedメソッドのみを記述する。  
+>void buttonPressed(){  
+    showDialog(  
+        context: context,  
+        builder: (BuildContext context) => SimpleDialog(  
+            title: const Text("Select assignment"),  
+            actions: <Widget>[  
+                SimpleDialogOption(  
+                  onPressd: () => Navigator.pop<Stirng>(context,'One'),  
+                  child: const Text('One'),  
+                ),  
+                SimpleDialogOption(  
+                  onPressd: () => Navigator.pop<Stirng>(context,'Two'),  
+                  child: const Text('Two'),  
+                ),  
+                SimpleDialogOption(  
+                  onPressd: () => Navigator.pop<Stirng>(context,'Three'),  
+                  child: const Text('Three'),  
+                ),  
+            ],  
+        ),  
+    ).then<void>((value) => resultAlert(value));  
 }  
